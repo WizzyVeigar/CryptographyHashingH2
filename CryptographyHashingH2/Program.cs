@@ -24,33 +24,47 @@ namespace CryptographyHashingH2
                     "3. Sha1");
                 string encryptMethod = Console.ReadLine().ToLower();
 
+                byte[] internalHashedArr = null;
+                switch (encryptMethod)
+                {
+                    case "sha256":
+                    case "1":
+                        internalHashedArr = HashData.ComputeHmacsha256(Encoding.UTF8.GetBytes(hashString), Encoding.UTF8.GetBytes(userKey));
+                        break;
+                    case "md5":
+                    case "2":
+                        internalHashedArr = HashData.ComputeHmacmd5(Encoding.UTF8.GetBytes(hashString), Encoding.UTF8.GetBytes(userKey));
+                        break;
+                    case "sha1":
+                    case "3":
+                        internalHashedArr = HashData.ComputeHmacsha1(Encoding.UTF8.GetBytes(hashString), Encoding.UTF8.GetBytes(userKey));
+                        break;
+                    default:
+                        break;
+                }
 
                 Console.WriteLine("is this validation? y/n");
                 bool isValidation = Console.ReadLine().ToLower() == "y" ? true : false;
                 if (isValidation)
                 {
                     Console.WriteLine("Enter hashed text");
-                    string hashedText = Console.ReadLine();
-                    Console.WriteLine("Your inserted text:\n" + hashedText);
+                    byte[] uHashedText = Convert.FromBase64String(Console.ReadLine());                    
+
+                    if (HashData.CheckAuthenticity(uHashedText, internalHashedArr, Encoding.UTF8.GetBytes(userKey)))
+                    {
+                        Console.WriteLine("Den er god nok");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Something has been changed");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Hashed value: " + Convert.ToBase64String(internalHashedArr));
+
                 }
 
-                switch (encryptMethod)
-                {
-                    case "sha256":
-                    case "1":
-                        Console.WriteLine("Hashed value: " + Convert.ToBase64String(HashData.ComputeHmacsha256(Encoding.UTF8.GetBytes(hashString), Encoding.UTF8.GetBytes(userKey))));
-                        break;
-                    case "md5":
-                    case "2":
-                        Console.WriteLine("Hashed value: " + Convert.ToBase64String(HashData.ComputeHmacmd5(Encoding.UTF8.GetBytes(hashString), Encoding.UTF8.GetBytes(userKey))));
-                        break;
-                    case "sha1":
-                    case "3":
-                        Console.WriteLine("Hashed value: " + Convert.ToBase64String(HashData.ComputeHmacsha1(Encoding.UTF8.GetBytes(hashString), Encoding.UTF8.GetBytes(userKey))));
-                        break;
-                    default:
-                        break;
-                }
 
                 Console.ReadKey();
             }
