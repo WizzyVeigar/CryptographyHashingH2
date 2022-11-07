@@ -43,14 +43,20 @@ namespace CryptographyHashingH2
                         break;
                 }
 
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < internalHashedArr.Length; i++)
+                {
+                    builder.Append(internalHashedArr[i].ToString("x2"));
+                }
+
                 Console.WriteLine("is this validation? y/n");
                 bool isValidation = Console.ReadLine().ToLower() == "y" ? true : false;
                 if (isValidation)
                 {
                     Console.WriteLine("Enter hashed text");
-                    byte[] uHashedText = Convert.FromBase64String(Console.ReadLine());                    
+                    string uText = Console.ReadLine();
 
-                    if (HashData.CheckAuthenticity(uHashedText, internalHashedArr, Encoding.UTF8.GetBytes(userKey)))
+                    if (builder.ToString() == uText)
                     {
                         Console.WriteLine("Den er god nok");
                     }
@@ -60,9 +66,8 @@ namespace CryptographyHashingH2
                     }
                 }
                 else
-                {
-                    Console.WriteLine("Hashed value: " + Convert.ToBase64String(internalHashedArr));
-
+                {                   
+                    Console.WriteLine("Hashed value: " + builder);
                 }
 
 
