@@ -69,8 +69,6 @@ namespace CryptographyHashingH2
                 {                   
                     Console.WriteLine("Hashed value: " + builder);
                 }
-
-
                 Console.ReadKey();
             }
         }
